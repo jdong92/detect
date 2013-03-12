@@ -19,6 +19,7 @@ date = first_date[0] + " " + first_date[1] + " " + first_date[2]
 date = datetime.strptime(date, format)
 
 #Reading through the log file
+#read_line = read_line[1:1000]
 
 for line in filter(None,read_file):
     get_date = line.split()
