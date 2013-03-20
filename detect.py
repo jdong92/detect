@@ -1,10 +1,14 @@
 from datetime import datetime, timedelta
 import re
+import sys
 
-LOGFILE = 'csacsExample'
+if (len(sys.argv) < 2):
+    print 'Usage: detect.py [logfile]'
+    exit()
+
+LOGFILE = str(sys.argv[1])
 MAX_TIME = 5
 MAX_ATTEMPT = 6
-
 
 f = open(LOGFILE, 'r')
 
@@ -21,6 +25,7 @@ date = datetime.strptime(date, format)
 #Reading through the log file
 
 for line in filter(None,read_file):
+
     get_date = line.split()
     match = re.search(('Remote-Address=(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'), line)
     if match:
@@ -30,6 +35,7 @@ for line in filter(None,read_file):
                 ip_address[match.group(1)] = 1
 
     #Extracting date from each line in the log file
+
     date_compare = get_date[0] + " " + get_date[1] + " " + get_date[2]
     date_compare = datetime.strptime(date_compare,format)
     diff = date_compare - date
