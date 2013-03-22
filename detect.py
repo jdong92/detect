@@ -2,11 +2,12 @@ from datetime import datetime, timedelta
 import re
 import sys
 
-if (len(sys.argv) < 2):
-    print 'Usage: detect.py [logfile]'
+if (len(sys.argv) < 3):
+    print 'Usage: detect.py [logfile] [unit of lines]'
     exit()
 
 LOGFILE = str(sys.argv[1])
+LINES = int(sys.argv[2])
 MAX_TIME = 5
 MAX_ATTEMPT = 6
 
@@ -23,9 +24,9 @@ date = first_date[0] + " " + first_date[1] + " " + first_date[2]
 date = datetime.strptime(date, format)
 
 #Reading through the log file
-#read_line = read_line[1:1000]
+read_line = read_file[-LINES:]
 
-for line in filter(None,read_file):
+for line in filter(None,read_line):
 
     get_date = line.split()
     match = re.search(('Remote-Address=(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'), line)
@@ -43,6 +44,7 @@ for line in filter(None,read_file):
 
     if (diff > timedelta(minutes=MAX_TIME)):
         date = str(date)
+        #Stripping off the 1900
         date = date[5:len(date)]
         print 'Date:',date, '\n'
         for key in ip_address:
@@ -54,4 +56,3 @@ for line in filter(None,read_file):
 
         date = date_compare
 
-#print ban_ip
